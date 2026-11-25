@@ -1,0 +1,338 @@
+@import "tailwindcss";
+
+/* ─── Tokens ──────────────────────────────────────────────────────────────
+ * Semantic token names are constant. Only the mapping changes per mode.
+ * Light is the default. Dark follows prefers-color-scheme, and a [data-theme]
+ * attribute on any element overrides the mode for that subtree (the manual
+ * uses it to show light and dark specimens side by side).
+ *
+ * The hex values here mirror LIGHT_TOKENS and DARK_TOKENS in
+ * src/lib/brand-data.ts. scripts/check-brand.ts (part of `pnpm lint`) fails
+ * when the two drift. The dark block appears twice because CSS cannot share a
+ * declaration block between a media query and an attribute selector.
+ */
+:root,
+[data-theme="light"] {
+  color-scheme: light;
+  --background: #f2eee4;
+  --card: #faf8f2;
+  --elevated: #e8e3d7;
+  --border: #d6d0c2;
+  --foreground: #141519;
+  --muted-foreground: #6b675f;
+  --primary: #141519;
+  --primary-foreground: #f2eee4;
+  --accent: #ffc21a;
+  --accent-foreground: #141519;
+  --success: #2f7a4b;
+  --destructive: #b83a26;
+  --hold: #8a5a00;
+  --ring: #141519;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --background: #141519;
+    --card: #1e1f24;
+    --elevated: #292a30;
+    --border: #34353b;
+    --foreground: #f2eee4;
+    --muted-foreground: #a29d92;
+    --primary: #f2eee4;
+    --primary-foreground: #141519;
+    --accent: #ffc21a;
+    --accent-foreground: #141519;
+    --success: #5dbb7f;
+    --destructive: #ee7a63;
+    --hold: #ffc21a;
+    --ring: #ffc21a;
+  }
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+  --background: #141519;
+  --card: #1e1f24;
+  --elevated: #292a30;
+  --border: #34353b;
+  --foreground: #f2eee4;
+  --muted-foreground: #a29d92;
+  --primary: #f2eee4;
+  --primary-foreground: #141519;
+  --accent: #ffc21a;
+  --accent-foreground: #141519;
+  --success: #5dbb7f;
+  --destructive: #ee7a63;
+  --hold: #ffc21a;
+  --ring: #ffc21a;
+}
+
+/* The default Tailwind palette is removed, so an off-brand class such as
+ * bg-purple-500 generates nothing. Only the semantic tokens exist. */
+@theme {
+  --color-*: initial;
+
+  /* Square corners everywhere. rounded-full stays for status dots. */
+  --radius-xs: 0px;
+  --radius-sm: 0px;
+  --radius-md: 0px;
+  --radius-lg: 0px;
+  --radius-xl: 0px;
+  --radius-2xl: 0px;
+  --radius-3xl: 0px;
+  --radius-4xl: 0px;
+
+  /* One curve. The mill turns in steps. */
+  --ease-mill: cubic-bezier(0.2, 0, 0, 1);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-card: var(--card);
+  --color-elevated: var(--elevated);
+  --color-border: var(--border);
+  --color-foreground: var(--foreground);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-success: var(--success);
+  --color-destructive: var(--destructive);
+  --color-hold: var(--hold);
+  --color-ring: var(--ring);
+
+  --font-sans: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-martian-mono), ui-monospace, "SFMono-Regular", monospace;
+  /* Bevan is the source face of the wordmark. Specimens only, never copy. */
+  --font-wordmark: var(--font-bevan), ui-serif, Georgia, serif;
+}
+
+@layer base {
+  html {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    font-stretch: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* A themed subtree takes its own ink, since `color` inherits the computed
+   * value from the parent mode. */
+  [data-theme] {
+    color: var(--foreground);
+  }
+
+  /* Focus ring: Iron on light, Gate on dark. */
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background-color: var(--accent);
+    color: var(--accent-foreground);
+  }
+}
+
+/* ─── Layout ──────────────────────────────────────────────────────────── */
+
+@utility page {
+  margin-inline: auto;
+  width: 100%;
+  max-width: 80rem;
+  padding-inline: 1.25rem;
+
+  @media (width >= 48rem) {
+    padding-inline: 2.5rem;
+  }
+}
+
+/* ─── Type ────────────────────────────────────────────────────────────── */
+
+/* Headlines: Archivo Expanded, weight 800, tracking -0.02em, sentence case. */
+@utility display {
+  font-family: var(--font-sans);
+  font-stretch: 125%;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+/* Kickers and inspection tags: Martian Mono, uppercase, width 87.5. */
+@utility kicker {
+  font-family: var(--font-mono);
+  font-stretch: 87.5%;
+  font-weight: 500;
+  font-size: 0.6875rem;
+  line-height: 1rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* Mono data: run logs, values, code. */
+@utility data {
+  font-family: var(--font-mono);
+  font-stretch: 87.5%;
+  font-weight: 400;
+  font-size: 0.75rem;
+  line-height: 1.25rem;
+}
+
+/* ─── Pattern: reeding ────────────────────────────────────────────────────
+ * 1px vertical ticks at a 4px pitch. Every 5th tick is longer, like a gauge.
+ * Drawn in currentColor, so the text color sets the ink.
+ */
+@utility reeding {
+  height: 10px;
+  background-image:
+    repeating-linear-gradient(90deg, currentColor 0 1px, transparent 1px 20px),
+    repeating-linear-gradient(90deg, currentColor 0 1px, transparent 1px 4px);
+  background-size:
+    100% 100%,
+    100% 60%;
+  background-position:
+    left bottom,
+    left bottom;
+  background-repeat: no-repeat;
+}
+
+/* ─── Pattern: hatch ──────────────────────────────────────────────────────
+ * Parallel 1px lines at 45 degrees. A quiet fill for shadow mode areas and
+ * diagrams. Drawn in currentColor.
+ */
+@utility hatch {
+  background-image: repeating-linear-gradient(45deg, currentColor 0 1px, transparent 1px 6px);
+}
+
+/* ─── Pattern: floor stripes ──────────────────────────────────────────────
+ * The hazard band painted on a factory floor: 8px Gate, 8px Iron, at 45
+ * degrees. Hard stops, so it is two flat inks and never a blend. Sparingly:
+ * one band per view.
+ */
+@utility hazard {
+  background-color: var(--accent);
+  background-image: repeating-linear-gradient(
+    -45deg,
+    var(--accent-foreground) 0 8px,
+    transparent 8px 16px
+  );
+}
+
+/* A dashed 1px rule in the ink color, like a cut line on a job sheet. */
+@utility rule-dashed {
+  height: 1px;
+  background-image: repeating-linear-gradient(90deg, currentColor 0 6px, transparent 6px 10px);
+}
+
+/* ─── Components ──────────────────────────────────────────────────────── */
+
+/* The one shadow in the system: a 2px hard offset in the ink color on the
+ * primary call to action. It reads as stamped. Pressing it seats the stamp. */
+@utility stamp {
+  box-shadow: 2px 2px 0 0 var(--foreground);
+  transition:
+    transform 240ms var(--ease-mill),
+    box-shadow 240ms var(--ease-mill);
+
+  &:hover {
+    transform: translate(1px, 1px);
+    box-shadow: 1px 1px 0 0 var(--foreground);
+  }
+
+  &:active {
+    transform: translate(2px, 2px);
+    box-shadow: 0 0 0 0 var(--foreground);
+  }
+}
+
+/* Fixed-size artifacts (social card, banner, slide) are drawn in em units.
+ * The frame is a size container and the artifact sets 1em from the frame
+ * width, so the same markup renders at exact size on its export route and
+ * scaled down inside the manual. --artifact-cols is the base width / 16. */
+.artifact-frame {
+  container-type: inline-size;
+  width: 100%;
+}
+
+.artifact {
+  font-size: calc(100cqw / var(--artifact-cols));
+  line-height: 1.2;
+  /* Spacing utilities and mono labels follow the artifact's em, not the rem. */
+  --spacing: 0.25em;
+}
+
+.artifact .kicker {
+  font-size: 0.6875em;
+  line-height: 1.4545;
+}
+
+/* ─── Motion ──────────────────────────────────────────────────────────────
+ * The mill turns in steps. The loader is the ll icon with one ear that has
+ * not decided: it flicks between back (Hold) and up (Pass) in one step, with
+ * no tween. It is the only loop in the system.
+ */
+@keyframes ear-flick {
+  0%,
+  49.99% {
+    visibility: visible;
+  }
+  50%,
+  100% {
+    visibility: hidden;
+  }
+}
+
+@keyframes gauge-fill {
+  from {
+    width: 0;
+  }
+}
+
+/* Two stacked frames. The second starts half a cycle late. Settled = Hold. */
+.ear-flick > :last-child {
+  visibility: hidden;
+}
+
+.ear-flick > :first-child {
+  animation: ear-flick 1920ms steps(1) infinite;
+}
+
+.ear-flick > :last-child {
+  animation: ear-flick 1920ms steps(1) -960ms infinite;
+}
+
+/* The gauge and the gate run on hover or focus, then stay settled. */
+.motion-demo:hover .gauge-fill,
+.motion-demo:focus .gauge-fill {
+  animation: gauge-fill 1600ms steps(40);
+}
+
+.gate-leaf {
+  transition: transform 160ms var(--ease-mill);
+}
+
+.motion-demo:hover .gate-leaf,
+.motion-demo:focus .gate-leaf {
+  transform: translateY(-100%);
+}
+
+/* Reduced motion renders everything settled. */
+@media (prefers-reduced-motion: reduce) {
+  .ear-flick > *,
+  .motion-demo:hover .gauge-fill,
+  .motion-demo:focus .gauge-fill {
+    animation: none;
+  }
+
+  .gate-leaf,
+  .stamp,
+  .stamp:hover,
+  .stamp:active {
+    transition: none;
+    transform: none;
+  }
+}
