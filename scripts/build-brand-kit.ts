@@ -12,8 +12,10 @@
  *   - Tagged Hold: the Ear Tag parts moved onto the folded ear with one affine
  *     transform (scale, rotate square to the ear, translate).
  *
- * Small-size cuts come from final/small, then final, then the shortlist
- * favicons, so a later cut is a re-run, not a code change.
+ * Small-size icon cuts come from final/small, then final, then the shortlist
+ * favicons, so a later cut is a re-run, not a code change. The small wordmark
+ * cut comes from final/pipemill-wordmark-small.svg, and its Iron and Flour
+ * colorways are recolors of that one path.
  */
 import { execFileSync } from 'node:child_process';
 import { copyFileSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
@@ -185,9 +187,22 @@ small('pipemill-icon-48.svg', null);
 small('pipemill-icon-light-16.svg', null);
 small('pipemill-icon-light-32.svg', null);
 small('pipemill-icon-light-48.svg', null);
-small('pipemill-wordmark-small.svg', null);
-small('pipemill-wordmark-small-iron.svg', null);
-small('pipemill-wordmark-small-flour.svg', null);
+// The small wordmark cut: the fold is kept, it starts lower and opens to about
+// 30 degrees. One source path, three inks. final/small holds an older cut.
+const smallWordmarkFile = join(src, 'final/pipemill-wordmark-small.svg');
+const smallWordmark = readPaths(smallWordmarkFile);
+const SMALL_WORDMARK_BOX = readFileSync(smallWordmarkFile, 'utf8').match(/viewBox="([^"]+)"/)?.[1];
+if (smallWordmark.length !== 1 || !SMALL_WORDMARK_BOX) {
+  throw new Error('final/pipemill-wordmark-small.svg: expected one path and a viewBox');
+}
+for (const [name, fill] of [
+  ['pipemill-wordmark-small.svg', 'currentColor'],
+  ['pipemill-wordmark-small-iron.svg', IRON],
+  ['pipemill-wordmark-small-flour.svg', FLOUR],
+]) {
+  write(name, svg(SMALL_WORDMARK_BOX, [{ d: smallWordmark[0].d, fill }]));
+  smallSource[name] = 'final/pipemill-wordmark-small.svg';
+}
 // The app icon is the icon master at a fixed 512: Iron tile, square corners.
 copy(join(out, 'pipemill-icon.svg'), 'pipemill-app-icon.svg');
 

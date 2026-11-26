@@ -487,15 +487,15 @@ const LOGO_ASSETS: BrandAsset[] = [
     'Small-size cut',
     'pipemill-wordmark-small.svg',
     'currentColor',
-    'Vector, for 64 to 120 px wide',
-    'The fold becomes one clean notch. Use below 120 px wide.'
+    'Vector, for 64 to 119 px wide',
+    'The fold starts lower and opens to about 30 degrees. The ll pair is about 3% tighter. Use below 120 px wide.'
   ),
   asset(
     'Wordmark',
     'Small-size cut, Iron',
     'pipemill-wordmark-small-iron.svg',
     'Iron',
-    'Vector, for 64 to 120 px wide',
+    'Vector, for 64 to 119 px wide',
     ON_FLOUR
   ),
   asset(
@@ -503,7 +503,7 @@ const LOGO_ASSETS: BrandAsset[] = [
     'Small-size cut, Flour',
     'pipemill-wordmark-small-flour.svg',
     'Flour',
-    'Vector, for 64 to 120 px wide',
+    'Vector, for 64 to 119 px wide',
     ON_IRON,
     'dark'
   ),
@@ -1183,9 +1183,9 @@ export const BRAND = {
     clearSpace:
       'Clear space is X on all four sides, where X is the x-height: the height of the bowl of the p.',
     minSize:
-      'Minimum sizes: the full wordmark needs 120 px of width. From 64 to 120 px wide, use the small-size cut. Below 64 px, use the ll icon. The icon goes down to 16 px with pixel-fit cuts at 16, 32 and 48 px. The mascot is never smaller than 64 px tall.',
+      'Minimum sizes: the full wordmark needs 120 px of width. From 64 to 119 px wide, use the small-size cut. Below 64 px, use the ll icon. The icon goes down to 16 px with pixel-fit cuts at 16, 32 and 48 px. The mascot is never smaller than 64 px tall.',
     smallSize: {
-      rule: 'Below 120 px wide, the 25 degree fold shrinks to a notch that looks like a rendering fault. Use the small-size cut there: the fold becomes one clean notch that survives at 64 px.',
+      rule: 'Below 120 px wide, the 25 degree fold gets too small to read as a fold and looks like a rendering fault. Use the small-size cut from 64 to 119 px wide. It keeps the fold: the fold starts lower on the l and opens to about 30 degrees, and the ll pair is about 3% tighter. Use the full cut at 120 px and up, and the ll icon below 64 px.',
       threshold: 120,
       floor: 64,
       asset: '/brand/pipemill-wordmark-small.svg',

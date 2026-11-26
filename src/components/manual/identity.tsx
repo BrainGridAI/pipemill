@@ -624,7 +624,7 @@ export function LogoSection() {
                     className="block bg-foreground"
                     style={{
                       width,
-                      aspectRatio: '10183.4 / 2381',
+                      aspectRatio: '10134.6 / 2204.7',
                       mask: `url(${logos.smallSize.asset}) center / contain no-repeat`,
                       WebkitMask: `url(${logos.smallSize.asset}) center / contain no-repeat`,
                     }}
